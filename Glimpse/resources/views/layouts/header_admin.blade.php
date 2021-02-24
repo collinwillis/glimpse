@@ -25,6 +25,41 @@ li a {
 li a:hover {
 	background-color: #111;
 }
+
+.crudbutton{
+   border: none;
+   height: 30px;
+   width: 60px;
+   color: white;
+   background-color: #1982FC;
+   border-radius: 5px;
+   margin: 15px;
+}
+
+.crudlink{
+    color: red;
+    font-weight: bold;
+}
+
+.form-container{
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 17px;
+  border: 3px solid #f1f1f1;
+  z-index: 9;
+  background-color: lightgrey;
+  width: 50%;
+  height: 50%;
+  
+}
+
+.floating-form {
+    margin-top: 15%;
+}
+
 </style>
 
 </head>
@@ -36,6 +71,8 @@ li a:hover {
 		<li><a class="active" href="{{ route('adminHome') }}">Home</a></li>
 		<li><a href="{{ route('admin') }}">Admin Controls</a></li>
 		<li><a href="{{ route('adminProfile') }}">Profile</a></li>
+		<li><a href="{{ route('adminViewJobs') }}">Jobs</a></li>
+		<li><a href="{{ route('myJobPostings') }}">My Jobs</a></li>
 		<li><a href="{{ route('home') }}">Logout</a></li>
 
 	</ul>

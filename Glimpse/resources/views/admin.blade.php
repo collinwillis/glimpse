@@ -7,15 +7,15 @@
 
 use App\Models\UserModel;
 use App\Services\Business\SecurityService;
-
-$securityservice = new SecurityService();
-$results = $securityservice->getAllUsers();
 ?>
 @extends('layouts.appmaster_admin')
 @section('title', 'Profile Page')
 @section('content')
 
+
 <div align="center">
+
+
     <table style="color: white" width="90%">
         <tr>
         <th>Username</th>
@@ -27,11 +27,13 @@ $results = $securityservice->getAllUsers();
         <th>City</th>
         <th>Zip</th>
         <th>Phone</th>
-        <th>Role</th>
+        <th></th>
+        <th></th>
+        <th></th>
         </tr>
         
 
-			@foreach($results as $result)
+			@foreach($users as $result)
 				<tr style="color: white">
 				 	<td>{{$result->getUsername()}}</td>
                 	<td>{{$result->getPassword()}}</td>
@@ -42,9 +44,20 @@ $results = $securityservice->getAllUsers();
                		<td>{{$result->getCity()}}</td>
                  	<td>{{$result->getZip()}}</td>
                		 <td>{{$result->getPhoneNum()}}</td>
-                	<td>{{$result->getRole()}}</td>
-                	 <td><a href="{!! route('editUser', ['username'=>$result->getUsername()]) !!}">Edit</a></td>
-                	 <td><a href="{!! route('deleteUser', ['username'=>$result->getUsername()]) !!}">Delete</a></td>
+                	@if(Session::get('currentUser') == $result->getUsername())
+
+                	 @else
+                	@if($result->getRole() == -1)
+                			<td><a href="{!! route('unsuspendUser', ['username'=>$result->getUsername()]) !!}" style="color: red">Unsuspend</a></td>
+                	 		<td><a href="{!! route('editUser', ['username'=>$result->getUsername()]) !!}">Edit</a></td>
+                	 		<td><a href="{!! route('deleteUser', ['username'=>$result->getUsername()]) !!}">Delete</a></td>
+                		@else
+                			<td><a href="{!! route('suspendUser', ['username'=>$result->getUsername()]) !!}"  style="color: lightgreen">Suspend</a></td>
+                	 		<td><a href="{!! route('editUser', ['username'=>$result->getUsername()]) !!}">Edit</a></td>
+                			<td><a href="{!! route('deleteUser', ['username'=>$result->getUsername()]) !!}">Delete</a></td>
+                	 	@endif
+                	 @endif
+
 
                  </tr>
 			@endforeach

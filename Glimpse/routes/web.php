@@ -42,8 +42,43 @@ Route::get('/adminProfile', 'UserController@adminProfile')->name('adminProfile')
 
 Route::get('/editUser/{username}', 'UserController@editUser')->name('editUser');
 
+Route::get('/suspendUser/{username}', 'UserController@suspendUser')->name('suspendUser');
+
+Route::get('/unsuspendUser/{username}', 'UserController@unsuspendUser')->name('unsuspendUser');
+
 Route::post('/onEditUser', 'UserController@onEditUser')->name('onEditUser');
 
 Route::get('/deleteUser/{username}', 'UserController@deleteUser')->name('deleteUser');
 
+Route::get('/portfolio', 'HomeController@portfolio')->name('portfolio');
+
+Route::post('/onAddJob', 'PortfolioController@onAddJob')->name('onAddJob');
+
+Route::post('/onEditJob', 'PortfolioController@updateJob')->name('onEditJob');
+
+Route::get('/onDeleteJob/{jobHistoryID}', 'PortfolioController@deleteJob')->name('onDeleteJob');
+
+Route::post('/onAddSkill', 'PortfolioController@onAddSkill')->name('onAddSkill');
+
+Route::post('/onEditSkill', 'PortfolioController@updateSkill')->name('onEditSkill');
+
+Route::get('/onDeleteSkill/{skillID}', 'PortfolioController@deleteSkill')->name('onDeleteSkill');
+
+Route::post('/onAddEducation', 'PortfolioController@onAddEducation')->name('onAddEducation');
+
+Route::post('/onEditEducation', 'PortfolioController@updateEducation')->name('onEditEducation');
+
+Route::get('/onDeleteEducation/{educationID}', 'PortfolioController@deleteEducation')->name('onDeleteEducation');
+
+Route::get('/jobs', 'HomeController@jobPostings')->name('jobs');
+
+Route::get('/adminViewJobs', 'HomeController@adminViewJobs')->name('adminViewJobs');
+
+Route::get('/myJobPostings', 'HomeController@myJobPostings')->name('myJobPostings');
+
+Route::post('/onAddJobPosting', 'JobController@onAddJob')->name('onAddJobPosting');
+
+Route::post('/onEditJobPosting', 'JobController@updateJob')->name('onEditJobPosting');
+
+Route::get('/onDeleteJobPosting/{jobID}', 'JobController@deleteJob')->name('onDeleteJobPosting');
             

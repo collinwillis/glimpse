@@ -12,29 +12,17 @@ use App\Models\UserModel;
 
 
 class SecurityDAO
-{
-
-    private $conn;
-
-    private $servername = "localhost";
-
-    private $username = "root";
-
-    private $password = "root";
-
-    private $dbname = "glimpse";
-
+{        
+    private $dbObj;
     private $dbQuery;
-    
     private $dbQuery2;
-    
     private $dbQuery3;
 
     // Constructor that creates a connection with the database
-    public function __construct()
+    public function __construct($dbObj)
     {
         // Create a connection to the database
-        $this->conn = mysqli_connect($this->servername, $this->username, $this->password, $this->dbname);
+        $this->dbObj = $dbObj;
         // Make sure to always test the connection and see if there are any errors
     }
 
@@ -47,16 +35,14 @@ class SecurityDAO
         try {
             // Define the query to search the database for the credentials
             $this->dbQuery = "INSERT INTO user
-                             (Username, Password, Email)
-                             VALUES ('" . $userUsername . "','" . $userPassword . "','" . $email . "')";
+                             (Username, Password, Email, Role)
+                             VALUES ('" . $userUsername . "','" . $userPassword . "','" . $email . "','0')";
 
-            if (mysqli_query($this->conn, $this->dbQuery)) {
+            if ($this->dbObj->query($this->dbQuery)) {
                 echo "Insert Successful";
-                mysqli_close($this->conn);
                 return true;
             } else {
                 echo "Insert Failed" . $this->dbQuery . " " . mysqli_error($this->conn);
-                mysqli_close($this->conn);
                 return false;
             }
         } catch (Exception $e) {
@@ -68,20 +54,16 @@ class SecurityDAO
     public function Login(UserModel $credentials)
     {
         try {
-            $this->dbQuery = "SELECT Username, Password
+            $this->dbQuery = "SELECT *
                               FROM user
                               WHERE Username = '{$credentials->getUsername()}'
                               AND Password = '{$credentials->getPassword()}'";
             
-            $result = mysqli_query($this->conn, $this->dbQuery);
+            $result = $this->dbObj->query($this->dbQuery);
             
             if(mysqli_num_rows($result) > 0) {
-                mysqli_free_result($result);
-                mysqli_close($this->conn);
                 return true;
             } else {
-                mysqli_free_result($result);
-                mysqli_close($this->conn);
                 return false;
             }
         } catch (Exception $e) {
@@ -97,15 +79,13 @@ class SecurityDAO
                               FROM user
                               WHERE Username = '{$credentials->getUsername()}'";
             
-            $result = mysqli_query($this->conn, $this->dbQuery);
+            $result = $this->dbObj->query($this->dbQuery);
             
             $role = $result->fetch_object()->Role;
             
             if($role == 1) {
-                mysqli_close($this->conn);
                 return true;
             } else {
-                mysqli_close($this->conn);
                 return false;
             }
         } catch (Exception $e) {
@@ -122,7 +102,7 @@ class SecurityDAO
                               FROM user
                               WHERE Username = '" . $username . "'";
             
-            $result = mysqli_query($this->conn, $this->dbQuery);
+            $result = $this->dbObj->query($this->dbQuery);
             $currentUser = new UserModel($username, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
             if(mysqli_num_rows($result) > 0) {
@@ -139,10 +119,39 @@ class SecurityDAO
                     $currentUser->setZip($row["ZipCode"]);
                     $currentUser->setRole($row["Role"]);
                 }
-                mysqli_close($this->conn);
                 return $currentUser;
             } else {
-                mysqli_close($this->conn);
+                return NULL;
+            }
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+    
+    //This method finds the user by using the username.
+    public function isSuspended($username)
+    {
+        try {
+            $this->dbQuery = "SELECT *
+                              FROM user
+                              WHERE Username = '" . $username . "'";
+            
+            $result = $this->dbObj->query($this->dbQuery);
+            
+            if(mysqli_num_rows($result) > 0) {
+                while($row = $result->fetch_assoc())
+                {
+                    $suspension = $row["Role"];
+                }
+                
+                if ($suspension == -1) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+                
+            } else {
                 return NULL;
             }
         } catch (Exception $e) {
@@ -158,7 +167,7 @@ class SecurityDAO
                               FROM user
                               WHERE UserID = '" . $id . "'";
             
-            $result = mysqli_query($this->conn, $this->dbQuery);
+            $result = $this->dbObj->query($this->dbQuery);
             $currentUser = new UserModel(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
             
             if(mysqli_num_rows($result) > 0) {
@@ -175,10 +184,8 @@ class SecurityDAO
                     $currentUser->setZip($row["ZipCode"]);
                     $currentUser->setRole($row["Role"]);
                 }
-                mysqli_close($this->conn);
                 return $currentUser;
             } else {
-                mysqli_close($this->conn);
                 return NULL;
             }
         } catch (Exception $e) {
@@ -189,9 +196,6 @@ class SecurityDAO
     //This method updates the user profile.
     public function updateProfile(UserModel $user)
     {
-        $userID = "";
-        $username = $user->getUsername();
-        $password = $user->getPassword();
         $phoneNum = $user->getPhoneNum();
         $gender = $user->getGender();
         $country = $user->getCountry();
@@ -202,33 +206,21 @@ class SecurityDAO
         $role = $user->getRole();
         try {
             // Define the query to search the database for the credentials
-            $this->dbQuery2 = "SELECT UserID
-                              FROM user
-                              WHERE Username = '" . $username . "'";
-            $result2 = mysqli_query($this->conn, $this->dbQuery2);
             
-            $userID = $result2->fetch_object()->UserID;
-            echo $userID;
+            $userID = $this->getUserIDByUsername($user->getUsername());
             
-            $this->dbQuery = "INSERT INTO user
-                             (UserID, Username, Password, Email, Gender, Country, State, City, ZipCode, PhoneNumber, Role)
-                             VALUES ('" . $userID . "','" . $username . "','" . $password . "','" . $email . "','" . $gender . "','" . $country . "','" . $state . "','" . $city . "','" . $zip . "','" . $phoneNum . "','" . $role ."')";
-            
-            $this->dbQuery3 = "DELETE FROM user WHERE Username = '" . $username . "'";
-            echo $this->dbQuery;
-            if(mysqli_query($this->conn, $this->dbQuery3))
-            {
-               
-            if (mysqli_query($this->conn, $this->dbQuery)) {
-                echo "Insert Successful";
-                mysqli_close($this->conn);
+            $this->dbQuery = "UPDATE user
+                             Set Email = '" . $email . "', Gender = '" . $gender . "', Country = '" . $country . "', State = '" . $state . "', City = '" . $city . "', ZipCode = '" . $zip . 
+                             "', PhoneNumber = '" . $phoneNum . "' WHERE UserID = " . $userID;
+
+            if ($this->dbObj->query($this->dbQuery)) {
+                echo "Update Successful";
                 return true;
             } else {
-                echo "Insert Failed" . $this->dbQuery . " " . mysqli_error($this->conn);
-                mysqli_close($this->conn);
+                echo "Update Failed" . $this->dbQuery . " " . mysqli_error($this->conn);
                 return false;
             }
-            }
+
         } catch (Exception $e) {
             echo $e->getMessage();
         }
@@ -238,9 +230,9 @@ class SecurityDAO
     function getAllUsers()
     {
 
-        $sql = "SELECT * FROM user";
+        $this->dbQuery = "SELECT * FROM user";
 
-        $results = mysqli_query($this->conn, $sql);
+        $results = $this->dbObj->query($this->dbQuery);
         
         $returnedUsers = array();
 
@@ -266,22 +258,58 @@ class SecurityDAO
         }
     }
     
-    //This method deletes a user from the database.
     function deleteUser($username)
     {
         
-        $sql = "DELETE FROM user WHERE Username = '" . $username . "'";
+        $this->dbQuery = "DELETE FROM user WHERE Username = '" . $username . "'";
 
-        if (mysqli_query($this->conn, $sql))
+        if ($this->dbObj->query($this->dbQuery))
         {
-            mysqli_close($this->conn);
             return true;
         }
         else
         {
-            mysqli_close($this->conn);
             return false;
         }
+    }
+    
+    function suspendUser($username)
+    {
+        
+        $this->dbQuery = "UPDATE user SET Role = '-1' WHERE Username = '" . $username . "'";
+        
+        if ($this->dbObj->query($this->dbQuery))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    function unsuspendUser($username)
+    {
+        
+        $this->dbQuery = "UPDATE user SET Role = '0' WHERE Username = '" . $username . "'";
+        
+        if ($this->dbObj->query($this->dbQuery))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    function getUserIDByUsername($username) 
+    {
+        $this->dbQuery = "SELECT UserID FROM user WHERE Username = '" . $username . "'";
+        
+        $result = $this->dbObj->query($this->dbQuery);
+        
+        return $result->fetch_object()->UserID;
     }
     
 }

@@ -59,6 +59,21 @@ html, body {
 .m-b-md {
 	margin-bottom: 30px;
 }
+
+.border-table {
+    color: white;
+    background-color: grey;
+    border-radius: 7px;
+    border: solid black 3px;
+    margin-bottom: 15px;
+    padding-bottom: 80px;
+}
+
+tr, td {
+    border: solid black 3px;
+    text-align: center;
+}
+
 </style>
 </head>
 <body>

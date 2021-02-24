@@ -18,6 +18,12 @@ html, body {
 	margin: 0;
 }
 
+.container {
+  height: 200px;
+  position: relative;
+  border: 3px solid green;
+}
+
 .full-height {
 	height: 100vh;
 }
@@ -40,6 +46,15 @@ html, body {
 
 .content {
 	text-align: center;
+}
+
+.center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 
 .title {

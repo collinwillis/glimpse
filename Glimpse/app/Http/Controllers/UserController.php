@@ -41,24 +41,43 @@ class UserController extends Controller
         $serviceLogin = new SecurityService();
         
         $isValid = $serviceLogin->login($credentials);
-        $isAdmin = $serviceLogin->isAdmin($credentials);
+        Session::forget('currentUser');
+        Session::forget('login');
+        Session::forget('suspended');
+        Session::forget('isAdmin');
         
         if ($isValid) {
+            $isAdmin = $serviceLogin->isAdmin($credentials);
             $currentUsername = request()->get('user_name');
-
+            
+            
             Session::put('currentUser', $currentUsername);
-            if($isAdmin)
-            {
-                
-                return view('welcome_admin');
+            Session::put('login', TRUE);
+            
+            $isSuspended = $serviceLogin->isSupsended($currentUsername);
+            
+            if ($isSuspended) {
+                Session::put('suspended', TRUE);
+                return view('login');
             }
-            else 
-            {
-                return view('welcome_loggedin');
+            else {
+                Session::put('suspended', FALSE);
+                
+                if($isAdmin)
+                {
+                    Session::put('isAdmin', TRUE);
+                    return view('welcome_admin');
+                }
+                else
+                {
+                    Session::put('isAdmin', False);
+                    return view('welcome_loggedin');
+                }
             }
         }
         else {
-            return view('loginFailed');
+            Session::put('login', FALSE);
+            return view('login');
         }
 
     }
@@ -69,7 +88,9 @@ class UserController extends Controller
     }
     //This method sends the admin to the admin page.
     public function admin() {
-        return view('admin');
+        $securityservice = new SecurityService();
+        $results = $securityservice->getAllUsers();
+        return view('admin')->with('users', $results);
     }
     //This method sends the admin to the admin profile page.
     public function adminProfile() {
@@ -134,13 +155,14 @@ class UserController extends Controller
         
         $didUpdate = $serviceUpdate->updateProfile($user);
         
+        $results = $serviceUpdate->getAllUsers();
+        return view('admin')->with('users', $results);
+        
         if ($didUpdate) {
             Session::forget('userToEdit');
-            return view('admin');
         }
         else {
             print_r($user);
-            return view('admin');
         }
         
     }
@@ -151,10 +173,11 @@ class UserController extends Controller
  
         $didDelete = $serviceDelete->deleteUser($username);
 
-
+        $results = $serviceDelete->getAllUsers();
+        return view('admin')->with('users', $results);
         
         if ($didDelete) {
-            return view('admin');
+            
         }
         else {
             echo didDelete;
@@ -163,5 +186,42 @@ class UserController extends Controller
         
     }
     
-   
+    //This method deletes a user from the database.
+    public function suspendUser($username){
+        
+        $serviceSuspend = new SecurityService();
+        
+        $didSuspend = $serviceSuspend->suspendUser($username);
+        
+        $results = $serviceSuspend->getAllUsers();
+        return view('admin')->with('users', $results);
+        
+        if ($didSuspend) {
+            
+        }
+        else {
+            echo didDelete;
+            return view('registerFailed');
+        }
+        
+    }
+    
+    public function unsuspendUser($username){
+        
+        $serviceSuspend = new SecurityService();
+        
+        $didUnsuspend = $serviceSuspend->unsuspendUser($username);
+        
+        $results = $serviceSuspend->getAllUsers();
+        return view('admin')->with('users', $results);
+        
+        if ($didUnsuspend) {
+            
+        }
+        else {
+            echo didDelete;
+            return view('registerFailed');
+        }
+        
+    }
 }
