@@ -49,12 +49,12 @@ use App\Services\Business\SecurityService;
                 	 @else
                 	@if($result->getRole() == -1)
                 			<td><a href="{!! route('unsuspendUser', ['username'=>$result->getUsername()]) !!}" style="color: red">Unsuspend</a></td>
-                	 		<td><a href="{!! route('editUser', ['username'=>$result->getUsername()]) !!}">Edit</a></td>
-                	 		<td><a href="{!! route('deleteUser', ['username'=>$result->getUsername()]) !!}">Delete</a></td>
+                	 		<td><a class="linktobutton" href="{!! route('editUser', ['username'=>$result->getUsername()]) !!}">Edit</a></td>
+                	 		<td><a class="linktobutton" href="{!! route('deleteUser', ['username'=>$result->getUsername()]) !!}">Delete</a></td>
                 		@else
                 			<td><a href="{!! route('suspendUser', ['username'=>$result->getUsername()]) !!}"  style="color: lightgreen">Suspend</a></td>
-                	 		<td><a href="{!! route('editUser', ['username'=>$result->getUsername()]) !!}">Edit</a></td>
-                			<td><a href="{!! route('deleteUser', ['username'=>$result->getUsername()]) !!}">Delete</a></td>
+                	 		<td><a class="linktobutton" href="{!! route('editUser', ['username'=>$result->getUsername()]) !!}">Edit</a></td>
+                			<td><a class="linktobutton" href="{!! route('deleteUser', ['username'=>$result->getUsername()]) !!}">Delete</a></td>
                 	 	@endif
                 	 @endif
 

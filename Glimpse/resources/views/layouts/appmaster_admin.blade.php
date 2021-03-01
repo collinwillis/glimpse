@@ -79,6 +79,33 @@ html, body {
 .m-b-md {
 	margin-bottom: 30px;
 }
+
+.border-table {
+    color: white;
+    background-color: grey;
+    border-radius: 7px;
+    border: solid black 3px;
+    margin-bottom: 15px;
+    padding-bottom: 80px;
+}
+
+tr, td {
+    border: solid black 3px;
+    text-align: center;
+}
+
+.linktobutton {
+  font: bold 11px Arial;
+  text-decoration: none;
+  background-color: #EEEEEE;
+  color: #333333;
+  padding: 2px 6px 2px 6px;
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC;
+}
+
 </style>
 </head>
 <body>

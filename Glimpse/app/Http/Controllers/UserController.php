@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Session;
 use App\Models\UserModel;
 use App\Services\Business\SecurityService;
 
-class UserController extends Controller
+class UserController
 {
     //This method registers a user.
     public function register(Request $request){
@@ -84,144 +84,186 @@ class UserController extends Controller
     
     //This method sends the user to the profile page.
     public function profile() {
-        return view('profile');
-    }
-    //This method sends the admin to the admin page.
-    public function admin() {
-        $securityservice = new SecurityService();
-        $results = $securityservice->getAllUsers();
-        return view('admin')->with('users', $results);
-    }
-    //This method sends the admin to the admin profile page.
-    public function adminProfile() {
-        return view('adminProfile');
-    }
-    //This method updates the user profile.
-    public function updateProfile(Request $request){
- 
-        $serviceUpdate = new SecurityService();
-        
-        $foundUser = $serviceUpdate->findByUsername(Session::get('currentUser'));
-        
-        $user = new UserModel(Session::get('currentUser'), $foundUser->getPassword(), request()->get('email'), request()->get('phoneNum'), request()->get('gender'), request()->get('country'), request()->get('state'), request()->get('city'), request()->get('zip'), $foundUser->getRole());
-        
-        $didUpdate = $serviceUpdate->updateProfile($user);
-        
-        if ($didUpdate) {
-            echo "Updated!!!!!";
+        if (!empty(Session::get('currentUser'))) {
             return view('profile');
         }
         else {
-            print_r($user);
-            return view('registerFailed');
+            return view('login');
         }
-        
+    }
+    //This method sends the admin to the admin page.
+    public function adminUser() {        
+        if (!empty(Session::get('currentUser'))) {
+            $securityservice = new SecurityService();
+            $results = $securityservice->getAllUsers();
+            return view('admin_user')->with('users', $results);
+        }
+        else {
+            return view('login');
+        }
+    }
+    //This method sends the admin to the admin profile page.
+    public function adminProfile() {
+        if (!empty(Session::get('currentUser'))) {
+            return view('adminProfile');
+        }
+        else {
+            return view('login');
+        }
+    }
+    //This method updates the user profile.
+    public function updateProfile(Request $request){
+        if (!empty(Session::get('currentUser'))) {
+            $serviceUpdate = new SecurityService();
+            
+            $foundUser = $serviceUpdate->findByUsername(Session::get('currentUser'));
+            
+            $user = new UserModel(Session::get('currentUser'), $foundUser->getPassword(), request()->get('email'), request()->get('phoneNum'), request()->get('gender'), request()->get('country'), request()->get('state'), request()->get('city'), request()->get('zip'), $foundUser->getRole());
+            
+            $didUpdate = $serviceUpdate->updateProfile($user);
+            
+            if ($didUpdate) {
+                echo "Updated!!!!!";
+                return view('profile');
+            }
+            else {
+                print_r($user);
+                return view('registerFailed');
+            }
+        }
+        else {
+            return view('login');
+        }
     }
     //This method updates the admin profile.
     public function updateAdminProfile(Request $request){
         
-        $serviceUpdate = new SecurityService();
-        
-        $foundUser = $serviceUpdate->findByUsername(Session::get('currentUser'));
-        
-        $user = new UserModel(Session::get('currentUser'), $foundUser->getPassword(), request()->get('email'), request()->get('phoneNum'), request()->get('gender'), request()->get('country'), request()->get('state'), request()->get('city'), request()->get('zip'), $foundUser->getRole());
-        
-        $didUpdate = $serviceUpdate->updateProfile($user);
-        
-        if ($didUpdate) {
-            echo "Updated!!!!!";
-            return view('adminProfile');
+        if (!empty(Session::get('currentUser'))) {
+            $serviceUpdate = new SecurityService();
+            
+            $foundUser = $serviceUpdate->findByUsername(Session::get('currentUser'));
+            
+            $user = new UserModel(Session::get('currentUser'), $foundUser->getPassword(), request()->get('email'), request()->get('phoneNum'), request()->get('gender'), request()->get('country'), request()->get('state'), request()->get('city'), request()->get('zip'), $foundUser->getRole());
+            
+            $didUpdate = $serviceUpdate->updateProfile($user);
+            
+            if ($didUpdate) {
+                echo "Updated!!!!!";
+                return view('adminProfile');
+            }
+            else {
+                print_r($user);
+                return view('registerFailed');
+            }
         }
         else {
-            print_r($user);
-            return view('registerFailed');
+            return view('login');
         }
         
     }
     //This method returns the edit page.
     public function editUser($username) {
-
-        Session::put('userToEdit', $username);
-        return view('editUser');
+        if (!empty(Session::get('currentUser'))) {
+            Session::put('userToEdit', $username);
+            return view('editUser');
+        }
+        else {
+            return view('login');
+        }
     }
     //This method submits the user edit.
     public function onEditUser(Request $request){
-        
-        $serviceUpdate = new SecurityService();
-        
-        $foundUser = $serviceUpdate->findByUsername(Session::get('userToEdit'));
-        
-        $user = new UserModel(Session::get('userToEdit'), $foundUser->getPassword(), request()->get('email'), request()->get('phoneNum'), request()->get('gender'), request()->get('country'), request()->get('state'), request()->get('city'), request()->get('zip'), $foundUser->getRole());
-        
-        $didUpdate = $serviceUpdate->updateProfile($user);
-        
-        $results = $serviceUpdate->getAllUsers();
-        return view('admin')->with('users', $results);
-        
-        if ($didUpdate) {
-            Session::forget('userToEdit');
+        if (!empty(Session::get('currentUser'))) {
+            $serviceUpdate = new SecurityService();
+            
+            $foundUser = $serviceUpdate->findByUsername(Session::get('userToEdit'));
+            
+            $user = new UserModel(Session::get('userToEdit'), $foundUser->getPassword(), request()->get('email'), request()->get('phoneNum'), request()->get('gender'), request()->get('country'), request()->get('state'), request()->get('city'), request()->get('zip'), $foundUser->getRole());
+            
+            $didUpdate = $serviceUpdate->updateProfile($user);
+            
+            if ($didUpdate) {
+                Session::forget('userToEdit');
+            }
+            else {
+                print_r($user);
+            }
+            
+            $results = $serviceUpdate->getAllUsers();
+            return view('admin_user')->with('users', $results);
         }
         else {
-            print_r($user);
+            return view('login');
         }
-        
     }
     //This method deletes a user from the database.
     public function deleteUser($username){
  
-        $serviceDelete = new SecurityService();
- 
-        $didDelete = $serviceDelete->deleteUser($username);
-
-        $results = $serviceDelete->getAllUsers();
-        return view('admin')->with('users', $results);
-        
-        if ($didDelete) {
+        if (!empty(Session::get('currentUser'))) {
             
+            $serviceDelete = new SecurityService();
+            
+            $didDelete = $serviceDelete->deleteUser($username);
+            
+            if ($didDelete) {
+                
+            }
+            else {
+                echo didDelete;
+                return view('registerFailed');
+            }
+            
+            $results = $serviceDelete->getAllUsers();
+            return view('admin_user')->with('users', $results);
         }
         else {
-            echo didDelete;
-            return view('registerFailed');
+            return view('login');
         }
         
     }
     
     //This method deletes a user from the database.
     public function suspendUser($username){
-        
-        $serviceSuspend = new SecurityService();
-        
-        $didSuspend = $serviceSuspend->suspendUser($username);
-        
-        $results = $serviceSuspend->getAllUsers();
-        return view('admin')->with('users', $results);
-        
-        if ($didSuspend) {
+        if (!empty(Session::get('currentUser'))) {
+            $serviceSuspend = new SecurityService();
             
+            $didSuspend = $serviceSuspend->suspendUser($username);
+            
+            if ($didSuspend) {
+                
+            }
+            else {
+                echo didDelete;
+                return view('registerFailed');
+            }
+            
+            $results = $serviceSuspend->getAllUsers();
+            return view('admin_user')->with('users', $results);
         }
         else {
-            echo didDelete;
-            return view('registerFailed');
+            return view('login');
         }
-        
     }
     
     public function unsuspendUser($username){
-        
-        $serviceSuspend = new SecurityService();
-        
-        $didUnsuspend = $serviceSuspend->unsuspendUser($username);
-        
-        $results = $serviceSuspend->getAllUsers();
-        return view('admin')->with('users', $results);
-        
-        if ($didUnsuspend) {
+        if (!empty(Session::get('currentUser'))) {
+            $serviceSuspend = new SecurityService();
             
+            $didUnsuspend = $serviceSuspend->unsuspendUser($username);
+            
+            if ($didUnsuspend) {
+                
+            }
+            else {
+                echo didDelete;
+                return view('registerFailed');
+            }
+            
+            $results = $serviceSuspend->getAllUsers();
+            return view('admin_user')->with('users', $results);
         }
         else {
-            echo didDelete;
-            return view('registerFailed');
+            return view('login');
         }
-        
     }
 }

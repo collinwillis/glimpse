@@ -10,7 +10,9 @@
 @section('title', 'Login Page')
 @section('content')
 
+<h1 align="center" style="color: white;"><b>LOGIN</b></h1>
 	<div class="center">
+		<img alt="Glimpse" src="images/logo.png" height="60px"><br><br>
 		<form action="{{route('doLogin')}}" method="post">
 		{{ csrf_field() }}
 			<label for="username">Username:</label> <input type="text"

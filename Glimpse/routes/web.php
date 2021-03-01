@@ -36,7 +36,7 @@ Route::post('/updateProfile', 'UserController@updateProfile')->name('updateProfi
 
 Route::post('/updateAdminProfile', 'UserController@updateAdminProfile')->name('updateAdminProfile');
 
-Route::get('/admin', 'UserController@admin')->name('admin');
+Route::get('/adminUser', 'UserController@adminUser')->name('adminUser');
 
 Route::get('/adminProfile', 'UserController@adminProfile')->name('adminProfile');
 
@@ -81,4 +81,16 @@ Route::post('/onAddJobPosting', 'JobController@onAddJob')->name('onAddJobPosting
 Route::post('/onEditJobPosting', 'JobController@updateJob')->name('onEditJobPosting');
 
 Route::get('/onDeleteJobPosting/{jobID}', 'JobController@deleteJob')->name('onDeleteJobPosting');
-            
+
+Route::get('/joinAffinityGroup/{affinityGroupID}', 'AffinItyGroupController@joinAffinityGroup')->name('joinAffinityGroup');
+
+Route::get('/leaveAffinityGroup/{affinityGroupID}', 'AffinItyGroupController@leaveAffinityGroup')->name('leaveAffinityGroup');
+
+Route::post('/onAddAffinityGroup', 'AffinityGroupController@onAddAffinityGroup')->name('onAddAffinityGroup');
+
+Route::get('/onDeleteAffinityGroup/{affinityGroupID}', 'AffinityGroupController@onDeleteAffinityGroup')->name('onDeleteAffinityGroup');
+
+Route::get('/groups', 'HomeController@affinityGroups')->name('groups');
+
+Route::get('/adminGroup', 'HomeController@adminGroup')->name('adminGroup');
+

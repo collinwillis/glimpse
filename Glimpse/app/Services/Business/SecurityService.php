@@ -8,6 +8,7 @@
 
 namespace App\Services\Business;
 
+use App\Models\AffinityGroupModel;
 use App\Models\UserModel;
 use App\Services\Data\SecurityDAO;
 use App\Services\Data\Utility\DBConnect;
@@ -20,46 +21,21 @@ use App\Models\SkillModel;
 use App\Services\Data\SkillDAO;
 use App\Models\JobModel;
 use App\Services\Data\JobDAO;
+use App\Services\Data\AffinityGroupDAO;
 
 class SecurityService
 {
 
-    private $insertUser;
-
-    private $verifyCred;
-    
-    private $findUser;
-    
-    private $getUsers;
-    
-    private $userToDelete;
-    
-    private $jobToAdd;
-    
-    private $jobToFind;
-    
-    private $educationToAdd;
-    
-    private $educationToFind;
-    
-    private $skillToAdd;
-    
-    private $skillToFind;
-    
-    private $userToSuspend;
-    
-    private $findSuspension;
-    
-    private $jobDAO;
-    
+    private $DAO;
+    private $DAO2;
 
     //This method registers a user.
     public function register(UserModel $newUser)
     {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->insertUser = new SecurityDAO($dbObj);
-        return $this->insertUser->Register($newUser);
+        $this->DAO = new SecurityDAO($dbObj);
+        return $this->DAO->Register($newUser);
     }
 
     //This method validates a user is in the database.
@@ -67,8 +43,8 @@ class SecurityService
     {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->verifyCred = new SecurityDAO($dbObj);
-        return $this->verifyCred->Login($credentials);
+        $this->DAO = new SecurityDAO($dbObj);
+        return $this->DAO->Login($credentials);
     }
     
     //This method checks to see if the user is an admin or not.
@@ -76,24 +52,24 @@ class SecurityService
     {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->verifyCred = new SecurityDAO($dbObj);
-        return $this->verifyCred->isAdmin($credentials);
+        $this->DAO = new SecurityDAO($dbObj);
+        return $this->DAO->isAdmin($credentials);
     }
     
     //This method finds the user by using the username.
     public function findByUsername($username) {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->findUser = new SecurityDAO($dbObj);
-        return $this->findUser->findByUsername($username);
+        $this->DAO = new SecurityDAO($dbObj);
+        return $this->DAO->findByUsername($username);
     }
     
     //This method find the user by using the UserID
     public function findByID($id) {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->findUser = new SecurityDAO($dbObj);
-        return $this->findUser->findUserByID($id);
+        $this->DAO = new SecurityDAO($dbObj);
+        return $this->DAO->findUserByID($id);
     }
     
     //This method updates the user profile
@@ -101,23 +77,23 @@ class SecurityService
     {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->insertUser = new SecurityDAO($dbObj);
-        return $this->insertUser->updateProfile($user);
+        $this->DAO = new SecurityDAO($dbObj);
+        return $this->DAO->updateProfile($user);
     }
     //This method gets all of the users in the database.
     public function getAllUsers() {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->getUsers = new SecurityDAO($dbObj);
-        return $this->getUsers->getAllUsers();
+        $this->DAO = new SecurityDAO($dbObj);
+        return $this->DAO->getAllUsers();
     }
     //This method deletes a user from the database.
     public function deleteUser($username) 
     {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->userToDelete = new SecurityDAO($dbObj);
-        return $this->userToDelete->deleteUser($username);
+        $this->DAO = new SecurityDAO($dbObj);
+        return $this->DAO->deleteUser($username);
     }
     
     //This method deletes a user from the database.
@@ -125,8 +101,8 @@ class SecurityService
     {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->userToSuspend = new SecurityDAO($dbObj);
-        return $this->userToSuspend->suspendUser($username);
+        $this->DAO = new SecurityDAO($dbObj);
+        return $this->DAO->suspendUser($username);
     }
     
     //This method deletes a user from the database.
@@ -134,16 +110,16 @@ class SecurityService
     {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->userToSuspend = new SecurityDAO($dbObj);
-        return $this->userToSuspend->unsuspendUser($username);
+        $this->DAO = new SecurityDAO($dbObj);
+        return $this->DAO->unsuspendUser($username);
     }
     
     //This method finds the user by using the username.
     public function isSupsended($username) {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->findSuspension = new SecurityDAO($dbObj);
-        return $this->findSuspension->isSuspended($username);
+        $this->DAO = new SecurityDAO($dbObj);
+        return $this->DAO->isSuspended($username);
     }
     
     //JOB METHODS
@@ -151,48 +127,48 @@ class SecurityService
     {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->jobToAdd = new JobHistoryDAO($dbObj);
-        $this->findUser = new SecurityDAO($dbObj);
+        $this->DAO = new JobHistoryDAO($dbObj);
+        $this->DAO2 = new SecurityDAO($dbObj);
         $username = Session::get('currentUser');
-        $userID = $this->findUser->getUserIDByUsername($username);
-        return $this->jobToAdd->addJobHistory($newJob, $userID);
+        $userID = $this->DAO2->getUserIDByUsername($username);
+        return $this->DAO->addJobHistory($newJob, $userID);
     }
     
     public function updateJob(JobHistoryModel $newJob)
     {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->jobToAdd = new JobHistoryDAO($dbObj);
-        $this->findUser = new SecurityDAO($dbObj);
+        $this->DAO = new JobHistoryDAO($dbObj);
+        $this->DAO2 = new SecurityDAO($dbObj);
         $username = Session::get('currentUser');
-        $userID = $this->findUser->getUserIDByUsername($username);
-        return $this->jobToAdd->updateJob($newJob, $userID);
+        $userID = $this->DAO2->getUserIDByUsername($username);
+        return $this->DAO->updateJob($newJob, $userID);
     }
     
     public function getAllJobs()
     {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->jobToAdd = new JobHistoryDAO($dbObj);
-        $this->findUser = new SecurityDAO($dbObj);
+        $this->DAO = new JobHistoryDAO($dbObj);
+        $this->DAO2 = new SecurityDAO($dbObj);
         $username = Session::get('currentUser');
-        $userID = $this->findUser->getUserIDByUsername($username);
-        return $this->jobToAdd->getAllJobs($userID);
+        $userID = $this->DAO2->getUserIDByUsername($username);
+        return $this->DAO->getAllJobs($userID);
     }
     
     public function deleteJob(int $jobHistoryID)
     {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->jobToAdd = new JobHistoryDAO($dbObj);
-        return $this->jobToAdd->deleteJob($jobHistoryID);
+        $this->DAO = new JobHistoryDAO($dbObj);
+        return $this->DAO->deleteJob($jobHistoryID);
     }
     
     public function findJobByID($id) {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->jobToFind = new JobHistoryDAO($dbObj);
-        return $this->jobToFind->findJobByID($id);
+        $this->DAO = new JobHistoryDAO($dbObj);
+        return $this->DAO->findJobByID($id);
     }
     
     //Education
@@ -200,41 +176,41 @@ class SecurityService
     {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->educationToAdd = new EducationDAO($dbObj);
-        $this->findUser = new SecurityDAO($dbObj);
+        $this->DAO = new EducationDAO($dbObj);
+        $this->DAO2 = new SecurityDAO($dbObj);
         $username = Session::get('currentUser');
-        $userID = $this->findUser->getUserIDByUsername($username);
-        return $this->educationToAdd->addEducation($newEducation, $userID);
+        $userID = $this->DAO2->getUserIDByUsername($username);
+        return $this->DAO->addEducation($newEducation, $userID);
     }
     
     public function updateEducation(EducationModel $newEducation)
     {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->educationToAdd = new EducationDAO($dbObj);
-        $this->findUser = new SecurityDAO($dbObj);
+        $this->DAO = new EducationDAO($dbObj);
+        $this->DAO2 = new SecurityDAO($dbObj);
         $username = Session::get('currentUser');
-        $userID = $this->findUser->getUserIDByUsername($username);
-        return $this->educationToAdd->updateEducation($newEducation, $userID);
+        $userID = $this->DAO2->getUserIDByUsername($username);
+        return $this->DAO->updateEducation($newEducation, $userID);
     }
     
     public function getAllEducations()
     {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->educationToFind = new EducationDAO($dbObj);
-        $this->findUser = new SecurityDAO($dbObj);
+        $this->DAO = new EducationDAO($dbObj);
+        $this->DAO2 = new SecurityDAO($dbObj);
         $username = Session::get('currentUser');
-        $userID = $this->findUser->getUserIDByUsername($username);
-        return $this->educationToFind->getAllEducation($userID);
+        $userID = $this->DAO2->getUserIDByUsername($username);
+        return $this->DAO->getAllEducation($userID);
     }
     
     public function deleteEducation(int $educationID)
     {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->educationToFind = new EducationDAO($dbObj);
-        return $this->educationToFind->deleteEducation($educationID);
+        $this->DAO = new EducationDAO($dbObj);
+        return $this->DAO->deleteEducation($educationID);
     }
     
     //Skill
@@ -242,41 +218,41 @@ class SecurityService
     {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->skillToAdd = new SkillDAO($dbObj);
-        $this->findUser = new SecurityDAO($dbObj);
+        $this->DAO = new SkillDAO($dbObj);
+        $this->DAO2 = new SecurityDAO($dbObj);
         $username = Session::get('currentUser');
-        $userID = $this->findUser->getUserIDByUsername($username);
-        return $this->skillToAdd->addSkill($newSkill, $userID);
+        $userID = $this->DAO2->getUserIDByUsername($username);
+        return $this->DAO->addSkill($newSkill, $userID);
     }
     
     public function updateSkill(SkillModel $newSkill)
     {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->skillToAdd = new SkillDAO($dbObj);
-        $this->findUser = new SecurityDAO($dbObj);
+        $this->DAO = new SkillDAO($dbObj);
+        $this->DAO2 = new SecurityDAO($dbObj);
         $username = Session::get('currentUser');
-        $userID = $this->findUser->getUserIDByUsername($username);
-        return $this->skillToAdd->updateSkill($newSkill, $userID);
+        $userID = $this->DAO2->getUserIDByUsername($username);
+        return $this->DAO->updateSkill($newSkill, $userID);
     }
     
     public function getAllSkills()
     {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->skillToFind = new SkillDAO($dbObj);
-        $this->findUser = new SecurityDAO($dbObj);
+        $this->DAO = new SkillDAO($dbObj);
+        $this->DAO2 = new SecurityDAO($dbObj);
         $username = Session::get('currentUser');
-        $userID = $this->findUser->getUserIDByUsername($username);
-        return $this->skillToFind->getAllSkill($userID);
+        $userID = $this->DAO2->getUserIDByUsername($username);
+        return $this->DAO->getAllSkill($userID);
     }
     
     public function deleteSkill(int $skillID)
     {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->skillToFind = new SkillDAO($dbObj);
-        return $this->skillToFind->deleteSkill($skillID);
+        $this->DAO = new SkillDAO($dbObj);
+        return $this->DAO->deleteSkill($skillID);
     }
     
     //Jobs
@@ -284,45 +260,113 @@ class SecurityService
     {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->jobDAO = new JobDAO($dbObj);
-        $this->findUser = new SecurityDAO($dbObj);
+        $this->DAO = new JobDAO($dbObj);
+        $this->DAO2 = new SecurityDAO($dbObj);
         $username = Session::get('currentUser');
-        $userID = $this->findUser->getUserIDByUsername($username);
-        return $this->jobDAO->addJob($newJob, $userID);
+        $userID = $this->DAO2->getUserIDByUsername($username);
+        return $this->DAO->addJob($newJob, $userID);
     }
     
     public function UpdateJobPosting(JobModel $newJob)
     {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->jobDAO = new JobDAO($dbObj);
-        return $this->jobDAO->updateJob($newJob);
+        $this->DAO = new JobDAO($dbObj);
+        return $this->DAO->updateJob($newJob);
     }
     
     public function getAllJobPostings()
     {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->jobDAO = new JobDAO($dbObj);
-        return $this->jobDAO->getAllJobs();
+        $this->DAO = new JobDAO($dbObj);
+        return $this->DAO->getAllJobs();
     }
     
     public function getAllMyJobPostings()
     {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->jobDAO = new JobDAO($dbObj);
-        $this->findUser = new SecurityDAO($dbObj);
+        $this->DAO = new JobDAO($dbObj);
+        $this->DAO2 = new SecurityDAO($dbObj);
         $username = Session::get('currentUser');
-        $userID = $this->findUser->getUserIDByUsername($username);
-        return $this->jobDAO->getMyPostedJobs($userID);
+        $userID = $this->DAO2->getUserIDByUsername($username);
+        return $this->DAO->getMyPostedJobs($userID);
     }
     
     public function deleteJobPosting(int $skillID)
     {
         $conn = new DBConnect();
         $dbObj = $conn->getDBConnect();
-        $this->jobDAO = new JobDAO($dbObj);
-        return $this->jobDAO->deleteJob($skillID);
+        $this->DAO = new JobDAO($dbObj);
+        return $this->DAO->deleteJob($skillID);
+    }
+    
+    public function addAffintyGroup(AffinityGroupModel $newAffinityGroup)
+    {
+        $conn = new DBConnect();
+        $dbObj = $conn->getDBConnect();
+        $this->DAO = new AffinityGroupDAO($dbObj);
+        return $this->DAO->addAffintyGroup($newAffinityGroup);
+    }
+    
+    function getAllAffinityGroups()
+    {
+        $conn = new DBConnect();
+        $dbObj = $conn->getDBConnect();
+        $this->DAO = new AffinityGroupDAO($dbObj);
+        return $this->DAO->getAllAffinityGroups();
+    }
+    
+    function getAllAffinityGroupsFromUser()
+    {
+        $conn = new DBConnect();
+        $dbObj = $conn->getDBConnect();
+        $this->DAO = new AffinityGroupDAO($dbObj);
+        $this->DAO2 = new SecurityDAO($dbObj);
+        $username = Session::get('currentUser');
+        $userID = $this->DAO2->getUserIDByUsername($username);
+        return $this->DAO->getAllAffinityGroupsFromUser($userID);
+    }
+    
+    function getAllOtherAffinityGroupsFromUser()
+    {
+        $conn = new DBConnect();
+        $dbObj = $conn->getDBConnect();
+        $this->DAO = new AffinityGroupDAO($dbObj);
+        $this->DAO2 = new SecurityDAO($dbObj);
+        $username = Session::get('currentUser');
+        $userID = $this->DAO2->getUserIDByUsername($username);
+        return $this->DAO->getAllOtherAffinityGroupsFromUser($userID);
+    }
+    
+    function deleteAffinityGroup(int $affinityGroupID)
+    {
+        $conn = new DBConnect();
+        $dbObj = $conn->getDBConnect();
+        $this->DAO = new AffinityGroupDAO($dbObj);
+        return $this->DAO->deleteAffinityGroup($affinityGroupID);
+    }
+    
+    function joinAffinityGroup($affinityGroupID)
+    {
+        $conn = new DBConnect();
+        $dbObj = $conn->getDBConnect();
+        $this->DAO = new AffinityGroupDAO($dbObj);
+        $this->DAO2 = new SecurityDAO($dbObj);
+        $username = Session::get('currentUser');
+        $userID = $this->DAO2->getUserIDByUsername($username);
+        return $this->DAO->joinAffinityGroup($userID, $affinityGroupID);
+    }
+    
+    function leaveAffinityGroup($affinityGroupID)
+    {
+        $conn = new DBConnect();
+        $dbObj = $conn->getDBConnect();
+        $this->DAO = new AffinityGroupDAO($dbObj);
+        $this->DAO2 = new SecurityDAO($dbObj);
+        $username = Session::get('currentUser');
+        $userID = $this->DAO2->getUserIDByUsername($username);
+        return $this->DAO->leaveAffinityGroup($userID, $affinityGroupID);
     }
 }

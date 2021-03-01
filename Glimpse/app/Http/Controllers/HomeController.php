@@ -10,7 +10,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Session;
 use App\Services\Business\SecurityService;
 
-class HomeController extends Controller
+class HomeController
 {
 
     /**
@@ -26,12 +26,22 @@ class HomeController extends Controller
     
     public function adminHome()
     {
-        return view('welcome_admin');
+        if (!empty(Session::get('currentUser'))) {
+            return view('welcome_admin');   
+        }
+        else {
+            return view('login');
+        }
     }
     
     public function userHome()
     {
-        return view('welcome_loggedin');
+        if (!empty(Session::get('currentUser'))) {
+            return view('welcome_loggedin');
+        }
+        else {
+            return view('login');
+        }
     }
     
     public function login()
@@ -48,32 +58,79 @@ class HomeController extends Controller
     }
     
     public function portfolio() {
-        $securityservice = new SecurityService();
-        $jobResults = $securityservice->getAllJobs();
-        $skillResults = $securityservice->getAllSkills();
-        $educationResults = $securityservice->getAllEducations();
-        return view('portfolio')->with('jobs', $jobResults)->with('skills', $skillResults)->with('educations', $educationResults);
+        if (!empty(Session::get('currentUser'))) {
+            $securityservice = new SecurityService();
+            $jobResults = $securityservice->getAllJobs();
+            $skillResults = $securityservice->getAllSkills();
+            $educationResults = $securityservice->getAllEducations();
+            return view('portfolio')->with('jobs', $jobResults)->with('skills', $skillResults)->with('educations', $educationResults);
+        }
+        else {
+            return view('login');
+        }
     }
     
     public function jobPostings() {
-        $securityservice = new SecurityService();
-        $jobResults = $securityservice->getAllJobPostings();
-        
-        return view('jobs')->with('jobs', $jobResults);
+        if (!empty(Session::get('currentUser'))) {
+            $securityservice = new SecurityService();
+            $jobResults = $securityservice->getAllJobPostings();
+            
+            return view('jobs')->with('jobs', $jobResults);
+        }
+        else {
+            return view('login');
+        }  
     }
     
     public function adminViewJobs() {
-        $securityservice = new SecurityService();
-        $jobResults = $securityservice->getAllJobPostings();
+        if (!empty(Session::get('currentUser'))) {
+            $securityservice = new SecurityService();
+            $jobResults = $securityservice->getAllJobPostings();
         
-        return view('adminViewJobs')->with('jobs', $jobResults);
+            return view('adminViewJobs')->with('jobs', $jobResults);
+        }
+        else {
+            return view('login');
+        }
     }
     
     public function myJobPostings() {
-        $securityservice = new SecurityService();
-        $jobResults = $securityservice->getAllMyJobPostings();
+        if (!empty(Session::get('currentUser'))) {
+            $securityservice = new SecurityService();
+            $jobResults = $securityservice->getAllMyJobPostings();
+            
+            return view('myJobPostings')->with('jobs', $jobResults);
+        }
+        else {
+            return view('login');
+        }
+            
+    }
+    
+    public function affinityGroups() {
+        if (!empty(Session::get('currentUser'))) {
+            $securityservice = new SecurityService();
+            $groupResults = $securityservice->getAllOtherAffinityGroupsFromUser();
+            $userGroupResults = $securityservice->getAllAffinityGroupsFromUser();
         
-        return view('myJobPostings')->with('jobs', $jobResults);
+            return view('affinity_group')->with('affinityGroups', $groupResults)
+                                         ->with('userAffinityGroups', $userGroupResults);
+        }
+        else {
+            return view('login');
+        }
+    }
+    
+    public function adminGroup() {
+        if (!empty(Session::get('currentUser'))) {
+            $securityservice = new SecurityService();
+            $groupResults = $securityservice->getAllAffinityGroups();
+        
+            return view('admin_group')->with('affinityGroups', $groupResults);
+        }
+        else {
+            return view('login');
+        }
     }
 
 }

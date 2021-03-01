@@ -55,7 +55,7 @@ use App\Services\Business\SecurityService;
 	<div style="text-align: left; border: solid black 3px; border-radius: 20px; width: 70%; color: white; padding: 10px; background-color: grey;">
 		<div style="float: right; display: inline-block;">
 			<button class="crudbutton" style="display: inline-block;" onclick="showEditJobPostingForm('{{$job->getJobID()}}', '{{$job->getTitle()}}', '{{$job->getCompany()}}', '{{$job->getDescription()}}', '{{$job->getRequirements()}}')">Edit</button>
-			<a class="crudlink" href="{!! route('onDeleteJobPosting', ['jobID'=>$job->getJobID()]) !!}" style="display: inline-block;">Delete</a>
+			<a class="linktobutton"  href="{!! route('onDeleteJobPosting', ['jobID'=>$job->getJobID()]) !!}" style="display: inline-block;">Delete</a>
 			
 		</div>
 		<h3>{{$job->getTitle()}}</h3>

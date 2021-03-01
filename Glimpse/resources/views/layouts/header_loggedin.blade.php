@@ -57,6 +57,7 @@ li a:hover {
 		<li><a href="{{ route('profile') }}">Profile</a></li>
 		<li><a href="{{ route('portfolio') }}">Portfolio</a></li>
 		<li><a href="{{ route('jobs') }}">Jobs</a></li>
+		<li><a href="{{ route('groups') }}">Groups</a></li>
 		<li><a href="{{ route('home') }}">Logout</a></li>
 		
 	</ul>

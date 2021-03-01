@@ -51,7 +51,7 @@ use App\Models\EducationModel;
 			<input type="button" onclick="hideEditJobForm()" value="Cancel">
 		</div>
 
-		<table style="color: white" width="90%">
+		<table style="color: white; width: 90%;">
 			<tr>
 				<th>Title</th>
 				<th>Company</th>
@@ -64,12 +64,12 @@ use App\Models\EducationModel;
 				<td>{{$result->getDescription()}}</td>
 				<td><button
 						onclick="showEditJobForm('{{$result->getJobID()}}', '{{$result->getTitle()}}', '{{$result->getCompany()}}', '{{$result->getDescription()}}')">Edit</button></td>
-				<td><a
-					href="{!! route('onDeleteJob', ['jobHistoryID'=>$result->getJobID()]) !!}">Delete</a></td>
+				<td><a class="linktobutton" href="{!! route('onDeleteJob', ['jobHistoryID'=>$result->getJobID()]) !!}">Delete</a></td>
 			</tr>
 			@empty
 			<h3>No Jobs</h3>
-			@endforelse @endif
+			@endforelse 
+			@endif
 		</table>
 	</div>
 
@@ -98,7 +98,7 @@ use App\Models\EducationModel;
 			<input type="button" onclick="hideEditSkillForm()" value="Cancel">
 		</div>
 
-		<table style="color: white" width="90%">
+		<table style="color: white; width: 90%;">
 			<tr>
 				<th>Skill</th>
 			</tr>
@@ -107,12 +107,12 @@ use App\Models\EducationModel;
 				<td>{{$result->getSkill()}}</td>
 				<td><button
 						onclick="showEditSkillForm('{{$result->getSkillID()}}', '{{$result->getSkill()}}')">Edit</button></td>
-				<td><a
-					href="{!! route('onDeleteSkill', ['SkillID'=>$result->getSkillID()]) !!}">Delete</a></td>
+				<td><a class="linktobutton" href="{!! route('onDeleteSkill', ['SkillID'=>$result->getSkillID()]) !!}">Delete</a></td>
 			</tr>
 			@empty
-			<h3>No skills</h3>
-			@endforelse @endif
+			<h3>No Jobs</h3>
+			@endforelse 
+			@endif
 		</table>
 	</div>
 
@@ -165,7 +165,7 @@ use App\Models\EducationModel;
 			<input type="button" onclick="hideEditEducationForm()" value="Cancel">
 		</div>
 
-		<table style="color: white" width="90%">
+		<table style="color: white; width: 90%;">
 			<tr>
 				<th>School Name</th>
 				<th>Degree</th>
@@ -183,10 +183,10 @@ use App\Models\EducationModel;
 				<td>{{$result->getStartDate()}}</td>
 				<td>{{$result->getEndDate()}}</td>
 				<td><button onclick="showEditEducationForm('{{$result->getEducationID()}}', '{{$result->getSchoolName()}}', '{{$result->getDegree()}}', '{{$result->getFieldOfStudy()}}', '{{$result->getStartDate()}}', '{{$result->getEndDate()}}')">Edit</button></td>
-				<td><a href="{!! route('onDeleteEducation', ['educationID'=>$result->getEducationID()]) !!}">Delete</a></td>
+				<td><a class="linktobutton" href="{!! route('onDeleteEducation', ['educationID'=>$result->getEducationID()]) !!}">Delete</a></td>
 			</tr>
 			@empty
-			<h3>No education</h3>
+			<h3>No Jobs</h3>
 			@endforelse 
 			@endif
 		</table>

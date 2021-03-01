@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Feb 24, 2021 at 04:25 AM
+-- Generation Time: Mar 01, 2021 at 03:43 AM
 -- Server version: 5.7.24
 -- PHP Version: 7.4.1
 
@@ -21,6 +21,49 @@ SET time_zone = "+00:00";
 --
 -- Database: `glimpse`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `affinity_group`
+--
+
+CREATE TABLE `affinity_group` (
+  `AffinityGroupID` int(11) NOT NULL,
+  `Name` varchar(100) NOT NULL,
+  `Description` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `affinity_group`
+--
+
+INSERT INTO `affinity_group` (`AffinityGroupID`, `Name`, `Description`) VALUES
+(1, 'Java', 'group that likes java'),
+(2, 'C-sharp', 'group that like C-sharp'),
+(4, 'PHP', 'group likes php'),
+(6, 'JavaScript', 'group likes JavaScript'),
+(7, 'CSS', 'group that likes CSS');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `affinity_group_user`
+--
+
+CREATE TABLE `affinity_group_user` (
+  `AffinityGroupUserID` int(11) NOT NULL,
+  `AffinityGroupID` int(11) NOT NULL,
+  `UserID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `affinity_group_user`
+--
+
+INSERT INTO `affinity_group_user` (`AffinityGroupUserID`, `AffinityGroupID`, `UserID`) VALUES
+(1, 1, 2),
+(34, 6, 3);
 
 -- --------------------------------------------------------
 
@@ -53,6 +96,13 @@ CREATE TABLE `job` (
   `UserID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `job`
+--
+
+INSERT INTO `job` (`JobID`, `Title`, `Company`, `Description`, `Requirements`, `UserID`) VALUES
+(1, 'Random', 'Random Company', 'Random Description', 'idk idk', 2);
+
 -- --------------------------------------------------------
 
 --
@@ -66,6 +116,13 @@ CREATE TABLE `job_history` (
   `Description` varchar(500) NOT NULL,
   `UserID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `job_history`
+--
+
+INSERT INTO `job_history` (`JobHistoryID`, `Title`, `Company`, `Description`, `UserID`) VALUES
+(1, 'AJOB', 'COMPANY', 'Description', 3);
 
 -- --------------------------------------------------------
 
@@ -120,6 +177,20 @@ INSERT INTO `user` (`UserID`, `Username`, `Password`, `Email`, `Gender`, `Countr
 --
 
 --
+-- Indexes for table `affinity_group`
+--
+ALTER TABLE `affinity_group`
+  ADD PRIMARY KEY (`AffinityGroupID`);
+
+--
+-- Indexes for table `affinity_group_user`
+--
+ALTER TABLE `affinity_group_user`
+  ADD PRIMARY KEY (`AffinityGroupUserID`),
+  ADD KEY `AffinityGroupUserUserID` (`UserID`),
+  ADD KEY `AffinityGroupUserGroupID` (`AffinityGroupID`);
+
+--
 -- Indexes for table `education`
 --
 ALTER TABLE `education`
@@ -158,6 +229,18 @@ ALTER TABLE `user`
 --
 
 --
+-- AUTO_INCREMENT for table `affinity_group`
+--
+ALTER TABLE `affinity_group`
+  MODIFY `AffinityGroupID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `affinity_group_user`
+--
+ALTER TABLE `affinity_group_user`
+  MODIFY `AffinityGroupUserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+
+--
 -- AUTO_INCREMENT for table `education`
 --
 ALTER TABLE `education`
@@ -167,13 +250,13 @@ ALTER TABLE `education`
 -- AUTO_INCREMENT for table `job`
 --
 ALTER TABLE `job`
-  MODIFY `JobID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `JobID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `job_history`
 --
 ALTER TABLE `job_history`
-  MODIFY `JobHistoryID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `JobHistoryID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `skill`
@@ -185,11 +268,18 @@ ALTER TABLE `skill`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `affinity_group_user`
+--
+ALTER TABLE `affinity_group_user`
+  ADD CONSTRAINT `AffinityGroupUserGroupID` FOREIGN KEY (`AffinityGroupID`) REFERENCES `affinity_group` (`AffinityGroupID`) ON DELETE CASCADE,
+  ADD CONSTRAINT `AffinityGroupUserUserID` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`);
 
 --
 -- Constraints for table `education`
