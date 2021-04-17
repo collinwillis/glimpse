@@ -17,8 +17,10 @@
 		{{ csrf_field() }}
 			<label for="username">Username:</label> <input type="text"
 				id="user_name" name="user_name" required> <br>
+				<?php echo "<br><div style='color: red;'>" . $errors->first('user_name') . "</div>"?>
 			<br> <label for="username">Password:</label> <input type="text"
 				id="password" name="password" required> <br>
+				<?php echo "<br><div style='color: red;'>" . $errors->first('password') . "</div>"?>
 			<br> <input type="submit" value="Login">
 		</form>
 		

@@ -14,7 +14,7 @@ use App\Services\Business\SecurityService;
 
 
 <div align="center">
-
+<h1 style="color: white;"><b>Admin User Controls</b></h1>
 
     <table style="color: white" width="90%">
         <tr>
@@ -27,9 +27,6 @@ use App\Services\Business\SecurityService;
         <th>City</th>
         <th>Zip</th>
         <th>Phone</th>
-        <th></th>
-        <th></th>
-        <th></th>
         </tr>
         
 

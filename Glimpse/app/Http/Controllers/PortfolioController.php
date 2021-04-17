@@ -1,28 +1,33 @@
 <?php
 // Glimpse 1.1 / CLC Milestone 2
-// Login / Register / Admin / Profile
+// Portfolio functions
 // Collin Willis and Derek Lundy
 // 2/7/21
-// This is the controller class for User-Based actions.
+// This is the controller class for User-Portfolio actions.
 
 namespace App\Http\Controllers;
 
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
-use App\Models\UserModel;
 use App\Services\Business\SecurityService;
+use App\Services\Data\Utility\ILoggerService;
 use App\Models\JobHistoryModel;
-use App\Services\Data\JobHistoryDAO;
 use App\Models\EducationModel;
 use App\Models\SkillModel;
+use Carbon\Exceptions\Exception;
 
-class PortfolioController
+class PortfolioController extends Controller
 {
-    //This method registers a user.
+    protected $logger;
+    
+    public function __construct(ILoggerService $logger)
+    {
+        $this->logger = $logger;
+    }
+    
+    //This method adds a job to the user's portfolio.
     public function onAddJob(Request $request){
-              
-        if (!empty(Session::get('currentUser'))) {
+        try {
             $newJob = new JobHistoryModel(NULL, request()->get('jobTitle'), request()->get('jobCompany'), request()->get('jobDescription'));
             
             $securityservice = new SecurityService();
@@ -40,18 +45,16 @@ class PortfolioController
             $skillResults = $securityservice->getAllSkills();
             $educationResults = $securityservice->getAllEducations();
             return view('portfolio')->with('jobs', $jobResults)->with('skills', $skillResults)->with('educations', $educationResults);
-        }
-        else {
-            return view('login');
-        }
-        
+    } catch (Exception $e) {
+        $this->logger->error("Add Job Failed: " . $e);
+    }
     }
     
 
-    //This method updates the user profile.
+    //This method updates the user portfolio.
     public function updateJob(Request $request){
         
-        if (!empty(Session::get('currentUser'))) {
+        try {
             $securityservice = new SecurityService();
             
             $updateMe = new JobHistoryModel(request()->get('editJobHistoryID'), request()->get('editJobTitle'), request()->get('editJobCompany'), request()->get('editJobDescription'));
@@ -69,19 +72,18 @@ class PortfolioController
             $skillResults = $securityservice->getAllSkills();
             $educationResults = $securityservice->getAllEducations();
             return view('portfolio')->with('jobs', $jobResults)->with('skills', $skillResults)->with('educations', $educationResults);
-        }
-        else {
-            return view('login');
+        } catch (Exception $e) {
+            $this->logger->error("Update Job Failed: " . $e);
         }
     }
     
 
     
 
-    //This method deletes a user from the database.
+    //This method deletes a job from the user's portfolio.
     public function deleteJob($jobHistoryID){
         
-        if (!empty(Session::get('currentUser'))) {
+        try {
             $securityservice = new SecurityService();
             
             $didDelete = $securityservice->deleteJob($jobHistoryID);
@@ -97,18 +99,16 @@ class PortfolioController
             $skillResults = $securityservice->getAllSkills();
             $educationResults = $securityservice->getAllEducations();
             return view('portfolio')->with('jobs', $jobResults)->with('skills', $skillResults)->with('educations', $educationResults);
+        } catch (Exception $e) {
+            $this->logger->error("Delete Job Failed: " . $e);
         }
-        else {
-            return view('login');
-        }
-        
     }
     
     
-    //This method registers a user.
+    //This method adds an education to the user's portfolio.
     public function onAddEducation(Request $request){
         
-        if (!empty(Session::get('currentUser'))) {
+        try {
             $newEducation = new EducationModel(NULL, request()->get('educationSchoolName'), request()->get('educationDegree'), request()->get('educationFieldOfStudy'), request()->get('educationStartDate'), request()->get('educationEndDate'));
             
             $securityservice = new SecurityService();
@@ -127,18 +127,16 @@ class PortfolioController
             $skillResults = $securityservice->getAllSkills();
             $educationResults = $securityservice->getAllEducations();
             return view('portfolio')->with('jobs', $jobResults)->with('skills', $skillResults)->with('educations', $educationResults);
+        } catch (Exception $e) {
+            $this->logger->error("Add Education Failed: " . $e);
         }
-        else {
-            return view('login');
-        }
-        
     }
     
     
-    //This method updates the user profile.
+    //This method updates education on the user's portfolio.
     public function updateEducation(Request $request){
         
-        if (!empty(Session::get('currentUser'))) {
+        try {
             $securityservice = new SecurityService();
             
             $updateMe = new EducationModel(request()->get('editEducationID'), request()->get('editEducationSchoolName'), request()->get('editEducationDegree'), request()->get('editEducationFieldOfStudy'), request()->get('editEducationStartDate'), request()->get('editEducationEndDate'));
@@ -156,19 +154,18 @@ class PortfolioController
             $skillResults = $securityservice->getAllSkills();
             $educationResults = $securityservice->getAllEducations();
             return view('portfolio')->with('jobs', $jobResults)->with('skills', $skillResults)->with('educations', $educationResults);
-        }
-        else {
-            return view('login');
+        } catch (Exception $e) {
+            $this->logger->error("Update Education Failed: " . $e);
         }
     }
     
     
     
     
-    //This method deletes a user from the database.
+    //This method deletes an education from the user's portfolio.
     public function deleteEducation($educationID){
         
-        if (!empty(Session::get('currentUser'))) {
+        try {
             $securityservice = new SecurityService();
             
             $didDelete = $securityservice->deleteEducation($educationID);
@@ -184,17 +181,15 @@ class PortfolioController
             $skillResults = $securityservice->getAllSkills();
             $educationResults = $securityservice->getAllEducations();
             return view('portfolio')->with('jobs', $jobResults)->with('skills', $skillResults)->with('educations', $educationResults);
+        } catch (Exception $e) {
+            $this->logger->error("Delete Education Failed: " . $e);
         }
-        else {
-            return view('login');
-        }
-        
     }
     
-    //This method registers a user.
+    //This method adds a skill to the user's portfolio.
     public function onAddSkill(Request $request){
         
-        if (!empty(Session::get('currentUser'))) {
+        try {
             $newSkill = new SkillModel(NULL, request()->get('skill'));
             
             $securityservice = new SecurityService();
@@ -212,16 +207,16 @@ class PortfolioController
             $skillResults = $securityservice->getAllSkills();
             $educationResults = $securityservice->getAllEducations();
             return view('portfolio')->with('jobs', $jobResults)->with('skills', $skillResults)->with('educations', $educationResults);
+        } catch (Exception $e) {
+            $this->logger->error("Add Skill Failed: " . $e);
         }
-        else {
-            return view('login');
-        }       
     }
     
     
-    //This method updates the user profile.
+    //This method updates a skill on the user's portfolio.
     public function updateSkill(Request $request){
-        if (!empty(Session::get('currentUser'))) {
+        
+        try {
             $securityservice = new SecurityService();
             
             $updateMe = new SkillModel(request()->get('editSkillID'), request()->get('editSkill'));
@@ -239,16 +234,16 @@ class PortfolioController
             $skillResults = $securityservice->getAllSkills();
             $educationResults = $securityservice->getAllEducations();
             return view('portfolio')->with('jobs', $jobResults)->with('skills', $skillResults)->with('educations', $educationResults);
-        }
-        else {
-            return view('login');
+        } catch (Exception $e) {
+            $this->logger->error("Update Skill Failed: " . $e);
         }
     }
     
     
-    //This method deletes a user from the database.
+    //This method deletes a skill from the user's portfolio.
     public function deleteSkill($skillID){
-        if (!empty(Session::get('currentUser'))) {
+        
+        try {
             $securityservice = new SecurityService();
             
             $didDelete = $securityservice->deleteSkill($skillID);
@@ -264,10 +259,8 @@ class PortfolioController
             $skillResults = $securityservice->getAllSkills();
             $educationResults = $securityservice->getAllEducations();
             return view('portfolio')->with('jobs', $jobResults)->with('skills', $skillResults)->with('educations', $educationResults);
+        } catch (Exception $e) {
+            $this->logger->error("Delete Skill Failed: " . $e);
         }
-        else {
-            return view('login');
-        }
-        
     }
 }

@@ -8,7 +8,6 @@
 namespace App\Services\Data;
 
 use Carbon\Exceptions\Exception;
-use App\Models\EducationModel;
 use App\Models\SkillModel;
 
 
@@ -27,7 +26,7 @@ class SkillDAO
         // Make sure to always test the connection and see if there are any errors
     }
 
-    //This method registers a user to the database.
+    //This method adds a skill to the user's portfolio
     public function addSkill(SkillModel $newSkill, int $userID)
     {
         $skill = $newSkill->getSkill();
@@ -49,7 +48,7 @@ class SkillDAO
         }
     }
     
-    //This method updates the user profile.
+    //This method updates a skill in the user's portfolio
     public function updateSkill(SkillModel $currentSkill, int $userID)
     {
         $skillID = $currentSkill->getSkillID();
@@ -76,7 +75,7 @@ class SkillDAO
         }
     }
     
-    //This mehtod gets all of the users from the database and returns an array.
+    //This method gets all of the skills for the user's portfolio
     function getAllSkill(int $userID)
     {
 
@@ -101,6 +100,7 @@ class SkillDAO
         }
     }
     
+    //This method deletes a skill from the user's portfolio
     function deleteSkill(int $skillID)
     {
         

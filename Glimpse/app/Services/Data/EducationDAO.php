@@ -1,6 +1,6 @@
 <?php
 // Glimpse 1.1 / CLC Milestone 2
-// Login / Register / Admin / Profile
+// Education
 // Collin Willis and Derek Lundy
 // 2/20/21
 // This is the Data Access Object class for interacting with the database.
@@ -26,7 +26,7 @@ class EducationDAO
         // Make sure to always test the connection and see if there are any errors
     }
 
-    //This method registers a user to the database.
+    // This method add an education to the user's portfolio
     public function addEducation(EducationModel $newEducation, int $userID)
     {
         $educationSchoolName = $newEducation->getSchoolName();
@@ -52,7 +52,7 @@ class EducationDAO
         }
     }
     
-    //This method updates the user profile.
+    //This method updates an education in the user's portfolio
     public function updateEducation(EducationModel $currentEducation, int $userID)
     {
         $educationID = $currentEducation->getEducationID();
@@ -83,7 +83,7 @@ class EducationDAO
         }
     }
     
-    //This mehtod gets all of the users from the database and returns an array.
+    //This method gets all of the euducation for the user's portfolio
     function getAllEducation(int $userID)
     {
 
@@ -112,6 +112,7 @@ class EducationDAO
         }
     }
     
+    //This method deletes an education from the user's portfolio
     function deleteEducation(int $educationID)
     {
         

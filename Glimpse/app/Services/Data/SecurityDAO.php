@@ -258,6 +258,7 @@ class SecurityDAO
         }
     }
     
+    // Delete user from the database
     function deleteUser($username)
     {
         
@@ -273,6 +274,7 @@ class SecurityDAO
         }
     }
     
+    // suspend a user in the database
     function suspendUser($username)
     {
         
@@ -288,6 +290,7 @@ class SecurityDAO
         }
     }
     
+    //unsuspend a user from the database
     function unsuspendUser($username)
     {
         
@@ -303,6 +306,7 @@ class SecurityDAO
         }
     }
     
+    //get the User ID by using the username
     function getUserIDByUsername($username) 
     {
         $this->dbQuery = "SELECT UserID FROM user WHERE Username = '" . $username . "'";

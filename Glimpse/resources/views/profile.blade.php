@@ -14,23 +14,33 @@
 @section('title', 'Profile Page')
 @section('content')
 	<div align="center">
+	<h1 style="color: white;"><b>Profile</b></h1>
 		<form action="{{route('updateProfile')}}" method="post">
 			{{ csrf_field() }}
-			<label for="email">Email:</label> <input type="email"
-				id="email" name="email" value="<?php echo $currentUser->getEmail()?>"> <br>
-			<label for="phoneNum">Phone Number:</label> <input type="text"
-				id="phoneNum" name="phoneNum" value="<?php echo $currentUser->getPhoneNum()?>"> <br>
-			<br> <label for="gender">Gender:</label> <input type="text" id="gender"
-				required name="gender" value="<?php echo $currentUser->getGender()?>"> <br>
-			<br> <label for="country">Country:</label> <input type="text"
-				id="country" name="country" value="<?php echo $currentUser->getCountry()?>"> <br>
-							<br> <label for="state">State:</label> <input type="text"
-				id="state" name="state" value="<?php echo $currentUser->getState()?>"> <br>
-							<br> <label for="city">City:</label> <input type="text"
-				id="city" name="city" value="<?php echo $currentUser->getCity()?>"> <br>
-							<br> <label for="zip">Zip Code:</label> <input type="text"
-				id="zip" name="zip" value="<?php echo $currentUser->getZip()?>"> <br>
-			<br> <input type="submit" value="Update">
+			<br>
+			<label for="email">Email:</label> 
+			<input type="email" id="email" name="email" value="<?php echo $currentUser->getEmail()?>">
+			<br><br>
+			<label for="phoneNum">Phone Number:</label> 
+			<input type="text" id="phoneNum" name="phoneNum" value="<?php echo $currentUser->getPhoneNum()?>">
+			<br><br>
+			<label for="gender">Gender:</label>
+			<input type="text" id="gender" required name="gender" value="<?php echo $currentUser->getGender()?>">
+			<br><br> 
+			<label for="country">Country:</label>
+			<input type="text" id="country" name="country" value="<?php echo $currentUser->getCountry()?>">
+			<br><br>
+			<label for="state">State:</label>
+			<input type="text" id="state" name="state" value="<?php echo $currentUser->getState()?>">
+			<br><br>
+			<label for="city">City:</label>
+			<input type="text" id="city" name="city" value="<?php echo $currentUser->getCity()?>">
+			<br><br>
+			<label for="zip">Zip Code:</label>
+			<input type="text" id="zip" name="zip" value="<?php echo $currentUser->getZip()?>">
+			<br><br>
+			<input class="linktobutton" type="submit" value="Update">
 		</form>
+		<a class="linktobutton"  href="{!! route('userHome') !!}" style="display: block; width: 60px; height: auto;">Back</a>
 	</div>
 @endsection

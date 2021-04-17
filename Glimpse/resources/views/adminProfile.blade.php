@@ -14,6 +14,7 @@
 @section('title', 'Profile Page')
 @section('content')
 	<div align="center">
+	<h1 align="center" style="color: white;"><b>Profile</b></h1>
 		<form action="{{route('updateAdminProfile')}}" method="post">
 			{{ csrf_field() }}
 			<label for="email">Email:</label> <input type="email"
@@ -30,7 +31,8 @@
 				id="city" name="city" value="<?php echo $currentUser->getCity()?>"> <br>
 							<br> <label for="zip">Zip Code:</label> <input type="text"
 				id="zip" name="zip" value="<?php echo $currentUser->getZip()?>"> <br>
-			<br> <input type="submit" value="Update">
+			<br> <input class="linktobutton" type="submit" value="Update">
 		</form>
+		<a class="linktobutton"  href="{!! route('adminHome') !!}" style="display: block; width: 60px; height: auto;">Back</a>
 	</div>
 @endsection

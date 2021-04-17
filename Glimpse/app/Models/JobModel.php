@@ -1,6 +1,6 @@
 <?php 
 // Glimpse 1.1 / CLC Milestone 2
-// User Model
+// Job Model
 // Collin Willis and Derek Lundy
 // 2/7/21
 // This is the model class for the user object.
@@ -8,7 +8,7 @@
 namespace App\Models;
 
 
-class JobModel
+class JobModel implements \JsonSerializable
 {
     private $jobID;
     private $title;
@@ -106,6 +106,11 @@ class JobModel
         $this->description = $description;
         $this->requirements = $requirements;
     }
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
+
     
 }
 ?>

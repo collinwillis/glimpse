@@ -38,7 +38,7 @@ use App\Models\AffinityGroupModel;
 			<tr>
 				<th>Group Name</th>
 				<th>Group Description</th>
-				<th> </th>
+		
 			</tr>
 			@if(is_array($affinityGroups))
 			@forelse($affinityGroups as $result)

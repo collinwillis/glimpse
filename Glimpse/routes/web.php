@@ -82,9 +82,9 @@ Route::post('/onEditJobPosting', 'JobController@updateJob')->name('onEditJobPost
 
 Route::get('/onDeleteJobPosting/{jobID}', 'JobController@deleteJob')->name('onDeleteJobPosting');
 
-Route::get('/joinAffinityGroup/{affinityGroupID}', 'AffinItyGroupController@joinAffinityGroup')->name('joinAffinityGroup');
+Route::get('/joinAffinityGroup/{affinityGroupID}', 'AffinityGroupController@joinAffinityGroup')->name('joinAffinityGroup');
 
-Route::get('/leaveAffinityGroup/{affinityGroupID}', 'AffinItyGroupController@leaveAffinityGroup')->name('leaveAffinityGroup');
+Route::get('/leaveAffinityGroup/{affinityGroupID}', 'AffinityGroupController@leaveAffinityGroup')->name('leaveAffinityGroup');
 
 Route::post('/onAddAffinityGroup', 'AffinityGroupController@onAddAffinityGroup')->name('onAddAffinityGroup');
 
@@ -94,3 +94,17 @@ Route::get('/groups', 'HomeController@affinityGroups')->name('groups');
 
 Route::get('/adminGroup', 'HomeController@adminGroup')->name('adminGroup');
 
+Route::post('/jobsearch', 'JobController@search')->name('jobsearch');
+
+Route::post('/Adminjobsearch', 'JobController@adminSearch')->name('adminjobsearch');
+
+Route::get('/showJob/{jobID}', 'JobController@showJob')->name('showJob');
+
+Route::get('/showJobAdmin/{jobID}', 'JobController@showJobAdmin')->name('showJobAdmin');
+
+Route::get('/applyJob/{jobID}', 'JobController@applyJob')->name('applyJob');
+
+//REST
+Route::get('/jobsrest', 'JobRestController@allJobs');
+Route::get('/jobsrest/{jobID}', 'JobRestController@showJob');
+Route::get('/usersrest/{userIDorName}', 'UserRestController@show');

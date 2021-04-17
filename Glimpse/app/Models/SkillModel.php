@@ -1,9 +1,9 @@
 <?php 
 // Glimpse 1.1 / CLC Milestone 2
-// User Model
+// Skill Model
 // Collin Willis and Derek Lundy
 // 2/7/21
-// This is the model class for the user object.
+// This is the model class for the skill object.
 
 namespace App\Models;
 

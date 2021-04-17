@@ -1,6 +1,6 @@
 <?php
 // Glimpse 1.1 / CLC Milestone 2
-// Login / Register / Admin / Profile
+// JobHistory
 // Collin Willis and Derek Lundy
 // 2/20/21
 // This is the Data Access Object class for interacting with the database.
@@ -8,7 +8,6 @@
 namespace App\Services\Data;
 
 use Carbon\Exceptions\Exception;
-use App\Models\UserModel;
 use App\Models\JobHistoryModel;
 
 
@@ -27,7 +26,7 @@ class JobHistoryDAO
         // Make sure to always test the connection and see if there are any errors
     }
 
-    //This method registers a user to the database.
+    //This method adds a job histor to user's portfolio
     public function addJobHistory(JobHistoryModel $newJob, int $userID)
     {
         $jobTitle = $newJob->getTitle();
@@ -51,7 +50,7 @@ class JobHistoryDAO
         }
     }
     
-    //This method updates the user profile.
+    //This method updates job history in user's portfolio
     public function updateJob(JobHistoryModel $currentJob, int $userID)
     {
         $jobID = $currentJob->getJobID();
@@ -80,7 +79,7 @@ class JobHistoryDAO
         }
     }
     
-    //This mehtod gets all of the users from the database and returns an array.
+    //This method gets all of the job history for user's portfolio
     function getAllJobs(int $userID)
     {
 
@@ -106,6 +105,7 @@ class JobHistoryDAO
         }
     }
     
+    //This method deletes a job history from the user's portfolio
     function deleteJob(int $jobID)
     {
         
@@ -121,6 +121,7 @@ class JobHistoryDAO
         }
     }
     
+    //This method finds a job history by the id
     function getJobId(int $userID, string $title) 
     {
         $this->dbQuery = "SELECT JobHistoryID
@@ -133,6 +134,7 @@ class JobHistoryDAO
         
     }
     
+    //This method finds a job history by the id
     public function findJobByID($id)
     {
         try {

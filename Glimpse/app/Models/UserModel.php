@@ -8,7 +8,7 @@
 namespace App\Models;
 
 
-class UserModel
+class UserModel implements \JsonSerializable
 {
     private $username;
     private $password;
@@ -197,6 +197,11 @@ class UserModel
         $this->zip = $zip;
         $this->role = $role;
     }
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
+
 
 }
 ?>

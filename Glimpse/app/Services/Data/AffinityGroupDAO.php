@@ -8,8 +8,6 @@
 namespace App\Services\Data;
 
 use Carbon\Exceptions\Exception;
-use App\Models\EducationModel;
-use App\Models\SkillModel;
 use App\Models\AffinityGroupModel;
 
 
@@ -28,7 +26,7 @@ class AffinityGroupDAO
         // Make sure to always test the connection and see if there are any errors
     }
 
-    //This method registers a user to the database.
+    //This method adds an Affinity Group.
     public function addAffintyGroup(AffinityGroupModel $newAffinityGroup)
     {
         $groupName = $newAffinityGroup->getName();
@@ -51,7 +49,7 @@ class AffinityGroupDAO
         }
     }
     
-    //This mehtod gets all of the users from the database and returns an array.
+    //This method get all of the Affinity Groups from the database and returns an array.
     function getAllAffinityGroups()
     {
 
@@ -77,7 +75,7 @@ class AffinityGroupDAO
         }
     }
     
-    //This mehtod gets all of the users from the database and returns an array.
+    //This method gets all user's affinity groups
     function getAllOtherAffinityGroupsFromUser(int $userID)
     {
         
@@ -104,7 +102,7 @@ class AffinityGroupDAO
         }
     }
     
-    //This mehtod gets all of the users from the database and returns an array.
+    //This method gets all user's affinity groups
     function getAllAffinityGroupsFromUser(int $userID)
     {
         
@@ -131,6 +129,7 @@ class AffinityGroupDAO
         }
     }
     
+    //This method deletes an affinity group
     function deleteAffinityGroup(int $affinityGroupID)
     {
         
@@ -146,6 +145,7 @@ class AffinityGroupDAO
         }
     }
     
+    //This method joins a user to a affinity group
     function joinAffinityGroup($userID, $affinityGroupID) 
     {
         $this->dbQuery = "INSERT INTO affinity_group_user
@@ -164,6 +164,7 @@ class AffinityGroupDAO
         }
     }
     
+    //This method removes a user from a affinity group
     function leaveAffinityGroup($userID, $affinityGroupID) 
     {
         $this->dbQuery = "DELETE FROM affinity_group_user WHERE AffinityGroupID = " . $affinityGroupID . " AND UserID = " . $userID;

@@ -29,7 +29,9 @@
 				id="city" name="city" value="<?php echo $userToEdit->getCity()?>"> <br>
 							<br> <label for="zip">Zip Code:</label> <input type="text"
 				id="zip" name="zip" value="<?php echo $userToEdit->getZip()?>"> <br>
-			<br> <input type="submit" value="Update">
+			<br> <input class="linktobutton" type="submit" value="Update">
 		</form>
+		<br/>
+		<a class="linktobutton"  href="{!! route('adminUser') !!}" style="display: block; width: 60px; height: auto;">Back</a>
 	</div>
 @endsection

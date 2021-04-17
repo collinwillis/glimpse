@@ -16,8 +16,8 @@ use App\Models\EducationModel;
 @section('content')
 
 <div align="center">
-
-	<div class="border-table">
+	<h1 style="color: white;"><b>Portfolio Editor</b></h1>
+	<div class="border-table" style="display: inline-block; width: 38%;">
 		<h3>Job History</h3>
 
 		<input type="button" id="addJobButton" onclick="showAddJobForm()"
@@ -73,7 +73,7 @@ use App\Models\EducationModel;
 		</table>
 	</div>
 
-	<div class="border-table">
+	<div class="border-table" style="display: inline-block; width: 18%;">
 		<h3>Skills</h3>
 
 		<input type="button" id="addSkillButton" onclick="showAddSkillForm()"
@@ -116,7 +116,7 @@ use App\Models\EducationModel;
 		</table>
 	</div>
 
-	<div class="border-table">
+	<div class="border-table" style="display: inline-block; width: 38%;">
 		<h3>Education</h3>
 
 		<input type="button" id="addEducationButton"

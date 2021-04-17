@@ -18,6 +18,10 @@ html, body {
 	margin: 0;
 }
 
+input {
+    color: black;
+}
+
 .container {
   height: 200px;
   position: relative;
@@ -74,10 +78,35 @@ html, body {
 .m-b-md {
 	margin-bottom: 30px;
 }
+
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: #333;
+}
+
+li {
+	float: left;
+}
+
+li a {
+	display: block;
+	color: white;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+}
+
+li a:hover {
+	background-color: #111;
+}
+
 </style>
 </head>
 <body>
-	@include('layouts.header')
+	@include('layouts.navbar_notLoggedIn')
 	<div align="center">@yield('content')</div>
 
 
